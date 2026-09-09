@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1788984524.35453 "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" "Reporte01.pdf" "Reporte01" 1788984525.47625 0
+["pdflatex"] 1788989978.46312 "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" "Reporte01.pdf" "Reporte01" 1788989979.24508 0
   "C:/Users/beto5/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1788984522 82641 abcbe3180462766c4b61d6c8fe88f8e8 ""
   "C:/Users/beto5/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1788907347 13333486 a42f9fa2d8e4e124c282ba31ec5e7dca ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
@@ -28,7 +28,6 @@
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1247596666 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
-  "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr5.pfb" 1247596667 31809 8670ca339bf94e56da1fc21c80635e2a ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1247596667 32762 7fee39e011c23b3589931effd97b9702 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1247596667 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/tex/context/base/mkii/supp-pdf.mkii" 1580390158 71627 94eb9990bed73c364d7f53f960cc8c5b ""
@@ -70,10 +69,10 @@
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/tex/latex/kvoptions/kvoptions.sty" 1656236481 22555 6d8e155cfef6d82c3d5c742fea7c992e ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/tex/latex/kvsetkeys/kvsetkeys.sty" 1665066333 13815 760b0c02f691ea230f5359c4e1de23a7 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/tex/latex/l3backend/l3backend-pdftex.def" 1761202581 30662 bfd6e864f4ffc5018b0e2b6260c3181c ""
-  "Reporte01.aux" 1788984525 549 071e5ecb14438bd2fcddf120d8ba5a35 "pdflatex"
-  "Reporte01.tex" 1788984466 2591 18b7a4aec66a97656dfcef2a7c25d9af ""
+  "Reporte01.aux" 1788989979 739 d19c6522fbc274c86adfd750cfe5c0c7 "pdflatex"
+  "Reporte01.tex" 1788989976 2798 cee96008bc643ae9ff023b6d7145796d ""
   "Resul_Simul_37Bus.png" 1788984231 86371 b9ca368aeabfccab2e6343fc9926531c ""
-  "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" 1788984466 2591 18b7a4aec66a97656dfcef2a7c25d9af ""
+  "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" 1788989976 2798 cee96008bc643ae9ff023b6d7145796d ""
   (generated)
   "Reporte01.aux"
   "Reporte01.log"
