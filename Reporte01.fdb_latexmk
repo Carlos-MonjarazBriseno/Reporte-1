@@ -1,14 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1788989978.46312 "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" "Reporte01.pdf" "Reporte01" 1788989979.24508 0
+["pdflatex"] 1789011516.83426 "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" "Reporte01.pdf" "Reporte01" 1789011517.47414 0
   "C:/Users/beto5/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1788984522 82641 abcbe3180462766c4b61d6c8fe88f8e8 ""
   "C:/Users/beto5/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1788907347 13333486 a42f9fa2d8e4e124c282ba31ec5e7dca ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1233951848 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msam10.tfm" 1233951854 916 f87d7c45f9c908e672703b83b72241a3 ""
-  "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msam5.tfm" 1233951854 924 9904cf1d39e9767e7a3622f2a125a565 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msam7.tfm" 1233951854 928 2dc8d444221b7a635bb58038579b861a ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm10.tfm" 1233951854 908 2921f8a10601f252058503cc6570e581 ""
-  "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm5.tfm" 1233951854 940 75ac932a52f80982a9f8ea75d03a34cf ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/symbols/msbm7.tfm" 1233951854 940 228d6584342e91276bf566bcf9716b83 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmbx12.tfm" 1136765053 1324 c910af8c371558dc20f2d7822f66fe64 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmex10.tfm" 1136765053 992 662f679a0b3d2d53c1b94050fdaa3f50 ""
@@ -24,7 +22,6 @@
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmsy8.tfm" 1136765053 1120 8b7d695260f3cff42e636090a8002094 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/tfm/public/cm/cmti10.tfm" 1136765053 1480 aa8e34af0eb6a2941b776984cf1dfdc4 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1247596666 32080 340ef9bf63678554ee606688e7b5339d ""
-  "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1247596667 35752 024fb6c41858982481f6968b5fc26508 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb" 1247596667 32722 d7379af29a190c3f453aba36302ff5a9 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1247596666 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
@@ -69,10 +66,10 @@
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/tex/latex/kvoptions/kvoptions.sty" 1656236481 22555 6d8e155cfef6d82c3d5c742fea7c992e ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/tex/latex/kvsetkeys/kvsetkeys.sty" 1665066333 13815 760b0c02f691ea230f5359c4e1de23a7 ""
   "C:/Users/beto5/AppData/Local/Programs/MiKTeX/tex/latex/l3backend/l3backend-pdftex.def" 1761202581 30662 bfd6e864f4ffc5018b0e2b6260c3181c ""
-  "Reporte01.aux" 1788989979 739 d19c6522fbc274c86adfd750cfe5c0c7 "pdflatex"
-  "Reporte01.tex" 1788989976 2798 cee96008bc643ae9ff023b6d7145796d ""
+  "Reporte01.aux" 1789011517 838 a17419cd7fd8ed81cc1cd342b28646a8 "pdflatex"
+  "Reporte01.tex" 1789011516 4007 047794a7ea41f9fd6c36da525825f6ac ""
   "Resul_Simul_37Bus.png" 1788984231 86371 b9ca368aeabfccab2e6343fc9926531c ""
-  "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" 1788989976 2798 cee96008bc643ae9ff023b6d7145796d ""
+  "c:/Archive/LaTeX Works/Servicio Social/Reporte 1/Reporte01.tex" 1789011516 4007 047794a7ea41f9fd6c36da525825f6ac ""
   (generated)
   "Reporte01.aux"
   "Reporte01.log"
