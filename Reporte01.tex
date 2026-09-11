@@ -4,7 +4,10 @@
 \usepackage{comment}
 \usepackage{graphicx, float}
 \usepackage[spanish, es-tabla]{babel}
+\usepackage{setspace}
 \graphicspath{{C:\Archive\LaTeX Works\Servicio Social\Reporte 1}}
+
+\onehalfspacing     
 
 \title{Reporte 1 Servicio Social}
 \author{Carlos Monjaraz}
@@ -33,10 +36,10 @@ como lo es la sintaxis, verbos de comando básicos y como se declaran los parám
 en el programa.
 
 Por ejemplo, en la carpeta de ejemplos del programa se tienen varios casos de estudio simples,
-como lo es el caso de "37Bus", en el cual se presentan los siguientes parámetros:
+como lo es el caso de <<37Bus>>, en el cual se presentan los siguientes parámetros:
 
-Primero en el ejemplo se declara un nuevo "objeto" llamado \textit{circuit.ieee37} (esto a través del 
-comando "New"), además le agrega varias especificaciones
+Primero en el ejemplo se declara un nuevo <<objeto>> llamado \textit{circuit.ieee37} (esto a través del 
+comando <<New>>), además le agrega varias especificaciones
 
 A su vez aparecen varias líneas de comandos, algunas son para el transformador de la subestación, otra
 para el transformador de la carga, y después varias líneas que representan a las líneas de trasmisión eléctrica,
@@ -47,10 +50,23 @@ Ya por ultimo está la línea con la que el programa se encarga de resolver el c
 
 Para ejecutar el programa el usuario debe seleccionar la parte del código que quiere ejecutar, en este caso todo el
 código (para seleccionar todo de manera rápida es muy útil usar la combinación de teclas Ctrl+A), después de seleccionar
-todo el código se tienen varias opciones para ejecutarlo, como lo es buscar en la interfaz la pestaña "Do" y seleccionar la
+todo el código se tienen varias opciones para ejecutarlo, como lo es buscar en la interfaz la pestaña <<Do>> y seleccionar la
 primera opción, o lo que es más cómodo usar la combinación de teclas Ctrl+D teniendo todo seleccionado.
 
+% Modelling and Simulation
 
+Aparte del ejemplo se deben de saber los diferentes modos de simulación del software para saber las herramientas con las que 
+se pueden trabajar.
+
+\begin{itemize}
+    \item flujo de potencia instantaneo (snapshot)
+    \item flujo de potencia diario (daily mode)
+    \item flujo de potencia anual (yearly mode)
+    \item análisis de harmónicos
+    \item análisis dinámico
+    \item estudio de falla
+    \item estudio de falla de Monte Carlo
+\end{itemize}
 %In 1902, Einstein created this famous equation: $E=mc^2$
 %Newton came up with: $\sum F=ma$
 
@@ -82,17 +98,7 @@ Para concluir quiero remarcar las posibilidades que se tienen a la hora de traba
 como lo es el obtener datos de simulación de un software (en el caso del artículo y punto central del reporte OpenDSS) 
 y procesarlos mediante un programa externo (python) y usar una libreria del mismo (Pyomo).
 
-A su vez logré comprender de manera superficial las bases para simular en OpenDSS como lo es el comando "New" para declarar objetos,
+A su vez logré comprender de manera superficial las bases para simular en OpenDSS como lo es el comando <<New>> para declarar objetos,
 además de aprender atajos en el teclado para simular y graficar en el programa.
-
-
-
-TEST TEST
-TEST
-TEST
-
-
-
-TEST
 
 \end{document}
