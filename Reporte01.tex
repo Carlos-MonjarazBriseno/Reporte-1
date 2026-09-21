@@ -1,45 +1,180 @@
-\documentclass{article}
+\documentclass[11pt, letterpaper]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{comment}
 \usepackage{graphicx, float}
-\usepackage[spanish, es-tabla]{babel}
+\usepackage[spanish, es-tabla, es-noindentfirst]{babel}
 \usepackage{setspace}
-\graphicspath{{C:\Archive\LaTeX Works\Servicio Social\Reporte 1}}
+\usepackage{bm}
+\usepackage{siunitx}
+\usepackage[
+    letterpaper, 
+    top=1in, 
+    bottom=1in, 
+    left=1.25in, 
+    right=1.25in
+]{geometry} 
 
+\DeclareSIUnit\pu{p.u.}
+
+\graphicspath{{C:\Archive\LaTeX Works\Servicio Social\Reporte 1}}
+\setlength{\parindent}{1.5cm}
+\setlength{\parskip}{6pt} 
 \onehalfspacing     
 
 \title{Reporte 1 Servicio Social}
 \author{Carlos Monjaraz}
-\date{09 de septiembre de 2026}
+\date{22 de septiembre de 2026}
 
 \begin{document}
 
 \maketitle
 
-\section{Investigación sobre flujos óptimos de potencia en sistemas monofásicos y trifásicos usando OpenDSS}
+\section{Investigación sobre flujos de potencia en sistemas monofásicos usando OpenDSS}
 
-En el artículo Open-DSOPF: an open-source optimal power flow formulation integrated with OpenDSS, 
-se trata la solución del método del flujo óptimo de potecia para tres fases no balanceadas, la cual puede
-formularse directamente del modelado usado en las simulaciones en OpenDSS.
+El análisis de flujos de potencia es muy usado en ingeniería eléctrica para encontrar la magnitud de voltaje, y el ángulo del mismo
+que se haya en una subestación (nodo o bus), ya sea de trasmisión o distribución, además se puede usar para encontrar pérdidas en el sistema.
 
-Todo lo anterior es posible gracias a un programa hecho en Python que en base a los resultados obtenidos en la
-simulación de OpenDSS, inicia un modelo de flujo óptimo de potencia y lo resuelve, después lo valida usando OpenDSS,
-y exporta la solución a Pyomo, el cual se encarga de optimizar el modelado.
+Las ecuaciones que se usan para el análisis de flujos de potencias se obtienen a partir de las siguientes operaciones y relaciones:
+\begin{align*}
+    S_k &= P_k + Q_k \\[1ex]
+    P_k &= P_{Gk} - P_{Lk} \\[1ex]
+    Q_k &= Q_{Gk} - Q_{Lk}
+\end{align*}
+\begin{center}
+Expresando la potencia compleja en términos de las
+tensiones y corrientes nodales:
+\end{center}
+\begin{align*}
+    S_k &= V_k I_k^* \\[1ex]
+    I_k &= \sum_{n=1}^{N}Y_{kn}V_n
+\end{align*}
+\begin{center}
+    Sustituyendo la expresión de la corriente nodal en
+la ecuación de potencia:
+\end{center}
+\begin{align*}
+    S_k &=
+    V_k
+    \left[
+        \sum_{n=1}^{N}Y_{kn}V_n
+    \right]^*
+\end{align*}
+\begin{center}
+    Ahora, expresando las tensiones nodales y los
+elementos de la matriz de admitancias en forma polar:
+\end{center}
+\begin{align*}
+    V_k &= |V_k|e^{j\delta_k} \\[1ex]
+    V_n &= |V_n|e^{j\delta_n} \\[1ex]
+    Y_{kn} &= |Y_{kn}|e^{j\theta_{kn}}
+\end{align*}
+\begin{center}
+    Al sustituir estas expresiones y desarrollar el
+conjugado complejo, se obtiene:
+\end{center}
+\begin{align*}
+    S_k &=
+    |V_k|
+    \sum_{n=1}^{N}
+    |Y_{kn}||V_n|
+    e^{j(\delta_k-\delta_n-\theta_{kn})}
+\end{align*}
+\begin{center}
+    Finalmente, separando la potencia aparente en potencia activa
+y reactiva:
+\end{center}
+\begin{equation}
+\begin{aligned}
+    P_k &=
+    |V_k|
+    \sum_{n=1}^{N}
+    |Y_{kn}||V_n|
+    \cos(\delta_k-\delta_n+\theta_{kn}) \\[1ex]
+    Q_k &=
+    |V_k|
+    \sum_{n=1}^{N}
+    |Y_{kn}||V_n|
+    \sin(\delta_k-\delta_n+\theta_{kn})
+\end{aligned}
+\label{Flujos de Potencia}
+\end{equation}
+
+Estas ecuaciones permiten calcular valores para la magnitud y el ángulo del voltaje en la subestación.
+
+Explicando cada término; se tiene $ P_k $ y $ Q_k $ que son la potencia activa y reactiva de un bus $ k $ respectivamente, después se tiene $ |V_k| $ que es la magnitud
+del voltaje que se encuentra en el bus, después esta la sumatoria, la cuál se usa para estipular la cantidad de buses del sistema e incluirlos en la ecuación de un solo bus
+(denotonándose por una cantidad $ n $ de buses), de ahí se encuentra $ |Y_{kn}| $ la cuál se refiere a la admitancia de la línea que conecta el bus $ k $ con uno de los buses $ n $,
+también está la magnitud del voltaje de $ n $, y por último se encuentra un $ \cos $ o $ \sin $ de los ángulos del voltaje ($ \delta $) del bus $ k $ o uno de los buses $ n $ respectivamente
+y el ángulo de la impedancia $ |Y_{kn}| $.
+
+Cabe destacar que para usar \eqref{Flujos de Potencia} y resolver para la magnitud y el ángulo de los voltajes es necesario saber los tipos de buses que tiene el sistema a analizar, los cuales son los siguientes:
+
+\begin{enumerate}
+    \item \textbf{Bus de carga o Slug}: solo puede existir un bus de este tipo en el sistema, usualmente se asigna a la subestación con el generador mayor, en este se propone $ |V_k| $(generalmente \qty{1}{\pu}) y un $ \delta_k $
+    (generalmente \ang{0}), en estos se desconoce $ P_k $ y $ Q_k $.
+    \item \textbf{Bus de carga o PQ}: la mayoría de buses en un sistema son de este tipo, en estos solamente hay cargas conectadas, se conoce $ P_k $ y $ Q_k $, pero no $ |V_k| $ ni $ \delta_k $.
+    \item \textbf{Bus de voltaje controlado o PV}: en este tipo de bus se tiene siempre conectado un generador o un compensador de potencia reactiva (ya sea estático o variable), se conoce $ P_k $ y $ |V_k| $, pero no $ Q_k $ ni 
+    $ \delta_k $.
+\end{enumerate}
+
+Ahora bien, estas ecuaciones son ecuaciones no lineales, por lo tanto, una forma <<cómoda>> de resolverlas es mediante el método iterativo
+de Newton-Raphson, donde en un sistema no lineal de ecuaciones de la forma $ \bm{f}(\bm{x}) = \bm{0} $, en el método de Newton-Raphson 
+se convierte cada iteración en un sistema lineal, esto repitiendo a lo largo de unas cuantas iteraciones se puede obtener el valor aproximado que hace que 
+el sistema de ecuaciones no lineales se cumpla, expresándose de la siguiente manera cuando se maneja para flujos de potencia:
+
+\begin{equation*}
+    \bm{J}(\bm{x}_k)\bm{\varDelta x}_k = \bm{y}-\bm{f}(\bm{x}_k)
+\end{equation*}
+\begin{center}
+    O lo que es lo mismo, pero en términos de flujos de plotencia:
+\end{center}
+\begin{equation}
+\begin{bmatrix}
+\mathbf{J}_1 & \mathbf{J}_2 \\
+\mathbf{J}_3 & \mathbf{J}_4
+\end{bmatrix}^{(k)}
+\begin{bmatrix}
+\Delta \boldsymbol{\delta} \\
+\Delta \mathbf{V}
+\end{bmatrix}^{(k)}
+=
+\begin{bmatrix}
+\mathbf{P} - \mathbf{P}(\mathbf{x}_k) \\
+\mathbf{Q} - \mathbf{Q}(\mathbf{x}_k)
+\end{bmatrix}
+\label{N-R_Flujo de Potencia}
+\end{equation}
+
+\begin{center}
+    donde $ \bm{J} $ es el Jacobiano de la función, es decir:
+\end{center}
+\begin{equation*}
+    \bm{J} = \begin{bmatrix}
+       \frac{\partial P_k}{\partial \delta_k} & \frac{\partial P_k}{\partial |V_k|} \\[1.5ex]
+       \frac{\partial Q_k}{\partial \delta_k} & \frac{\partial Q_k}{\partial |V_k|}
+    \end{bmatrix}
+\end{equation*}
+
+Ya habiendo entendido lo que es el problema de flujos de potencia, es pertinente como se resuelve mediante algún tipo de software, en este caso OpenDSS.
+
+Profundizando en el software de simulación OpenDSS (Open Distribution System Software por sus siglas) es un programa de análisis y simulación
+desarollado por el Electric Power Research Institute (EPRI), este software esta diseñado principalmente para manejar redes eléctricas no balanceadas
+multifásicas integrando recursos enérgeticos distribuidos (DER) analizando a lo largo de series de tiempo.
 
 \section{Como realizar una simulación en OpenDSS}
 
 Por medio de la documentación del programa OpenDSS y a través de la
-lista de videos en el canal de EPRI OpenDSS para aprender a simular 
+lista de videos en el canal de 'EPRI OpenDSS' para aprender a simular 
 en OpenDSS, logré aprender las diferentes funcionalidades básicas del programa,
 como lo es la sintaxis, verbos de comando básicos y como se declaran los parámetros 
 en el programa.
 
 Por ejemplo, en la carpeta de ejemplos del programa se tienen varios casos de estudio simples,
-como lo es el caso de <<37Bus>>, en el cual se presentan los siguientes parámetros:
+como lo es el caso de <<37Bus>>, en el cuál se presentan los siguientes parámetros:
 
 Primero en el ejemplo se declara un nuevo <<objeto>> llamado \textit{circuit.ieee37} (esto a través del 
-comando <<New>>), además le agrega varias especificaciones
+comando <<New>>), además le agrega varias especificaciones.
 
 A su vez aparecen varias líneas de comandos, algunas son para el transformador de la subestación, otra
 para el transformador de la carga, y después varias líneas que representan a las líneas de trasmisión eléctrica,
@@ -53,36 +188,6 @@ código (para seleccionar todo de manera rápida es muy útil usar la combinaci�
 todo el código se tienen varias opciones para ejecutarlo, como lo es buscar en la interfaz la pestaña <<Do>> y seleccionar la
 primera opción, o lo que es más cómodo usar la combinación de teclas Ctrl+D teniendo todo seleccionado.
 
-% Modelling and Simulation
-
-Aparte del ejemplo se deben de saber los diferentes modos de simulación del software para saber las herramientas con las que 
-se pueden trabajar.
-
-\begin{itemize}
-    \item flujo de potencia instantaneo (snapshot)
-    \item flujo de potencia diario (daily mode)
-    \item flujo de potencia anual (yearly mode)
-    \item análisis de harmónicos
-    \item análisis dinámico
-    \item estudio de falla
-    \item estudio de falla de Monte Carlo
-\end{itemize}
-%In 1902, Einstein created this famous equation: $E=mc^2$
-%Newton came up with: $\sum F=ma$
-
-\begin{equation}
-    5+5=10
-\end{equation}
-
-\begin{equation}
-    \begin{split}
-        A & = \frac{\pi r^2}{2} \\
-        A & = \frac{1}{2} \pi r^2
-    \end{split}
-\end{equation}
-
-How to add images
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=2in]{Resul_Simul_37Bus.png}
@@ -90,11 +195,31 @@ How to add images
 \label{fig:my_label}
 \end{figure}
 
-Como se puede observar en la anterior figura, OpenDSS da un resumen del circuito.
+Como se puede observar en la anterior figura, OpenDSS da un resumen de los resultados del circuito.
+
+Cabe recalcar que los resultados del sistema se guardan en matrices, las cuales se pueden analizar usando el comando <<\textbf{Show Voltages LN}>>
+(para visualizar caídas de tensión por nodo) o el comando <<\textbf{Export Losses}>> (que exporta los resultados en formato CSV), este proceso se puede complementar
+con otros softwares mediante el servidor COM incorporado en OpenDSS, el cual permite a otros softwares leer y extraer los datos que se necesiten y desarollar un programa
+que analice dichos datos.
+
+Aparte del ejemplo se deben de saber los diferentes modos de simulación del software para saber las herramientas con las que se pueden trabajar.
+
+\begin{itemize}
+    \item flujo de potencia instantáneo (snapshot)
+    \item flujo de potencia diario (daily mode)
+    \item flujo de potencia anual (yearly mode)
+    \item análisis de harmónicos
+    \item análisis dinámico
+    \item estudio de falla
+    \item estudio de falla de Monte Carlo
+\end{itemize}
 
 \section{Conclusión}
 
-Para concluir quiero remarcar las posibilidades que se tienen a la hora de trabajar en múltiples softwares,
+Para concluir este reporte me ayudó en diferentes aspectos, como lo son el manejo de LaTeX para realizar el reporte, el entendimiento que obtuve sobre los flujos de potencia
+(para ser exacto los buses y las variables de un sistema de potencia, además de su resolución), y el manejo de OpenDSS para realizar simulaciones.
+
+Además, quiero remarcar las posibilidades que se tienen a la hora de trabajar en múltiples softwares,
 como lo es el obtener datos de simulación de un software (en el caso del artículo y punto central del reporte OpenDSS) 
 y procesarlos mediante un programa externo (python) y usar una libreria del mismo (Pyomo).
 
