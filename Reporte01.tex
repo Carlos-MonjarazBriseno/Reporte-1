@@ -14,8 +14,14 @@
     left=1.25in, 
     right=1.25in
 ]{geometry} 
+\usepackage{listings}
+\usepackage{xcolor}
+
+
 
 \DeclareSIUnit\pu{p.u.}
+
+
 
 \graphicspath{{C:\Archive\LaTeX Works\Servicio Social\Reporte 1}}
 \setlength{\parindent}{1.5cm}
@@ -27,11 +33,68 @@
 \date{22 de septiembre de 2026}
 
 \begin{document}
-
+ 
 \maketitle
+
+\section{Como realizar una simulación en OpenDSS}
+
+En la anterior sección se comentó sobre los flujos de potencia y la simulación en OpenDSS de manera conceptual sobre
+flujos de potencia en sistemas monofásicos, ahora se entrará en detalle sobre como realizar una simulación cualquiera (en este caso un
+ejemplo del propio OpenDSS).
+
+Por medio de la documentación del programa OpenDSS y a través de la
+lista de videos en el canal de 'EPRI OpenDSS' para aprender a simular 
+en OpenDSS, se logra aprender las diferentes funcionalidades básicas del programa,
+como lo es la sintaxis, verbos de comando básicos y como se declaran los parámetros 
+en el programa.
+
+Por ejemplo, en la carpeta de ejemplos del programa se tienen varios casos de estudio simples,
+como lo es el caso de <<37Bus>>, en el cuál se presentan los siguientes parámetros:
+
+Primero en el ejemplo se declara un nuevo <<objeto>> llamado \textit{circuit.ieee37} (esto a través del 
+comando <<New>>), además le agrega varias especificaciones.
+
+A su vez aparecen varias líneas de comandos, algunas son para el transformador de la subestación, otra
+para el transformador de la carga, y después varias líneas que representan a las líneas de trasmisión eléctrica,
+declarando cosas como fases, la longitud y los buses 1 y 2.
+Después realiza lo mismo con las cargas, pero agregando el voltaje, y potencia activa y reactiva.
+
+Ya por ultimo está la línea con la que el programa se encarga de resolver el circuito y las iteraciones que usará.
+
+Para ejecutar el programa el usuario debe seleccionar la parte del código que quiere ejecutar, en este caso todo el
+código (para seleccionar todo de manera rápida es muy útil usar la combinación de teclas Ctrl+A), después de seleccionar
+todo el código se tienen varias opciones para ejecutarlo, como lo es buscar en la interfaz la pestaña <<Do>> y seleccionar la
+primera opción, o lo que es más cómodo usar la combinación de teclas Ctrl+D teniendo todo seleccionado.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=2in]{Resul_Simul_37Bus.png}
+\caption{Resultados de la simulación del ejemplo IEEE37}
+\label{fig:my_label}
+\end{figure}
+
+Como se puede observar en la anterior figura, OpenDSS da un resumen de los resultados del circuito.
+
+Cabe recalcar que los resultados del sistema se guardan en matrices, las cuales se pueden analizar usando el comando <<\textbf{Show Voltages LN}>>
+(para visualizar caídas de tensión por nodo) o el comando <<\textbf{Export Losses}>> (que exporta los resultados en formato CSV), este proceso se puede complementar
+con otros softwares mediante el servidor COM incorporado en OpenDSS, el cual permite a otros softwares leer y extraer los datos que se necesiten y desarollar un programa
+que analice dichos datos.
+
+Aparte del ejemplo se deben de saber los diferentes modos de simulación del software para saber las herramientas con las que se pueden trabajar.
+
+\begin{itemize}
+    \item Flujo de potencia instantáneo (snapshot)
+    \item Flujo de potencia diario (daily mode)
+    \item Flujo de potencia anual (yearly mode)
+    \item Análisis de harmónicos
+    \item Análisis dinámico
+    \item Estudio de falla
+    \item Estudio de falla de Monte Carlo
+\end{itemize}
 
 \section{Investigación sobre flujos de potencia en sistemas monofásicos usando OpenDSS}
 
+\subsection{Flujos de Potencia}
 El análisis de flujos de potencia es muy usado en ingeniería eléctrica para encontrar la magnitud de voltaje, y el ángulo del mismo
 que se haya en una subestación (nodo o bus), ya sea de trasmisión o distribución, además se puede usar para encontrar pérdidas en el sistema.
 
@@ -111,7 +174,7 @@ y el ángulo de la impedancia $ |Y_{kn}| $.
 Cabe destacar que para usar \eqref{Flujos de Potencia} y resolver para la magnitud y el ángulo de los voltajes es necesario saber los tipos de buses que tiene el sistema a analizar, los cuales son los siguientes:
 
 \begin{enumerate}
-    \item \textbf{Bus de carga o Slug}: solo puede existir un bus de este tipo en el sistema, usualmente se asigna a la subestación con el generador mayor, en este se propone $ |V_k| $(generalmente \qty{1}{\pu}) y un $ \delta_k $
+    \item \textbf{Bus de carga o Slack}: solo puede existir un bus de este tipo en el sistema, usualmente se asigna a la subestación con el generador mayor, en este se propone $ |V_k| $ (generalmente \qty{1}{\pu}) y un $ \delta_k $
     (generalmente \ang{0}), en estos se desconoce $ P_k $ y $ Q_k $.
     \item \textbf{Bus de carga o PQ}: la mayoría de buses en un sistema son de este tipo, en estos solamente hay cargas conectadas, se conoce $ P_k $ y $ Q_k $, pero no $ |V_k| $ ni $ \delta_k $.
     \item \textbf{Bus de voltaje controlado o PV}: en este tipo de bus se tiene siempre conectado un generador o un compensador de potencia reactiva (ya sea estático o variable), se conoce $ P_k $ y $ |V_k| $, pero no $ Q_k $ ni 
@@ -156,63 +219,79 @@ el sistema de ecuaciones no lineales se cumpla, expresándose de la siguiente ma
     \end{bmatrix}
 \end{equation*}
 
+\subsection{Flujos de Potencia en OpenDSS}
+\label{F_P OpenDSS}
+
 Ya habiendo entendido lo que es el problema de flujos de potencia, es pertinente como se resuelve mediante algún tipo de software, en este caso OpenDSS.
 
 Profundizando en el software de simulación OpenDSS (Open Distribution System Software por sus siglas) es un programa de análisis y simulación
 desarollado por el Electric Power Research Institute (EPRI), este software esta diseñado principalmente para manejar redes eléctricas no balanceadas
 multifásicas integrando recursos enérgeticos distribuidos (DER) analizando a lo largo de series de tiempo.
 
-\section{Como realizar una simulación en OpenDSS}
+Para lograr simular flujos de potencia en sistemas monofásicos es necesario recalcar como es que OpenDSS representa un sistema eléctrico, esto lo logra
+representando a sus componentes mediante <<objetos>>.
 
-Por medio de la documentación del programa OpenDSS y a través de la
-lista de videos en el canal de 'EPRI OpenDSS' para aprender a simular 
-en OpenDSS, logré aprender las diferentes funcionalidades básicas del programa,
-como lo es la sintaxis, verbos de comando básicos y como se declaran los parámetros 
-en el programa.
-
-Por ejemplo, en la carpeta de ejemplos del programa se tienen varios casos de estudio simples,
-como lo es el caso de <<37Bus>>, en el cuál se presentan los siguientes parámetros:
-
-Primero en el ejemplo se declara un nuevo <<objeto>> llamado \textit{circuit.ieee37} (esto a través del 
-comando <<New>>), además le agrega varias especificaciones.
-
-A su vez aparecen varias líneas de comandos, algunas son para el transformador de la subestación, otra
-para el transformador de la carga, y después varias líneas que representan a las líneas de trasmisión eléctrica,
-declarando cosas como fases, la longitud y los buses 1 y 2.
-Después realiza lo mismo con las cargas, pero agregando el voltaje, y potencia activa y reactiva.
-
-Ya por ultimo está la línea con la que el programa se encarga de resolver el circuito y las iteraciones que usará.
-
-Para ejecutar el programa el usuario debe seleccionar la parte del código que quiere ejecutar, en este caso todo el
-código (para seleccionar todo de manera rápida es muy útil usar la combinación de teclas Ctrl+A), después de seleccionar
-todo el código se tienen varias opciones para ejecutarlo, como lo es buscar en la interfaz la pestaña <<Do>> y seleccionar la
-primera opción, o lo que es más cómodo usar la combinación de teclas Ctrl+D teniendo todo seleccionado.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=2in]{Resul_Simul_37Bus.png}
-\caption{Resultados de la simulación del ejemplo IEEE37}
-\label{fig:my_label}
-\end{figure}
-
-Como se puede observar en la anterior figura, OpenDSS da un resumen de los resultados del circuito.
-
-Cabe recalcar que los resultados del sistema se guardan en matrices, las cuales se pueden analizar usando el comando <<\textbf{Show Voltages LN}>>
-(para visualizar caídas de tensión por nodo) o el comando <<\textbf{Export Losses}>> (que exporta los resultados en formato CSV), este proceso se puede complementar
-con otros softwares mediante el servidor COM incorporado en OpenDSS, el cual permite a otros softwares leer y extraer los datos que se necesiten y desarollar un programa
-que analice dichos datos.
-
-Aparte del ejemplo se deben de saber los diferentes modos de simulación del software para saber las herramientas con las que se pueden trabajar.
+Para un sistema monofásico es común encontrar los siguientes tipos:
 
 \begin{itemize}
-    \item flujo de potencia instantáneo (snapshot)
-    \item flujo de potencia diario (daily mode)
-    \item flujo de potencia anual (yearly mode)
-    \item análisis de harmónicos
-    \item análisis dinámico
-    \item estudio de falla
-    \item estudio de falla de Monte Carlo
+    \item \textbf{Circuit o Vsource}: es la fuente de alimentación del sistema
+    \item \textbf{Line}: es la línea eléctrica
+    \item \textbf{Load}: es la carga
+    \item \textbf{Bus}: es un bus, nodo, o subestación eléctrica
+    \item \textbf{Solution}: es la configuración y ejeción del flujo de potencia
 \end{itemize}
+
+Vsource representa una fuente de voltaje con una impedancia equivalente de Thévenin, OpenDSS la utiliza como referencia (es decir el slack bus).
+
+OpenDSS permite especificar las impedancias de línea mediante parámetros, matrices de impedancia o mediante el comando <<\textbf{LineCode}>>, este modelo
+imita impedancias en serie y la capacitancia en derivación.
+
+Las cargas se respresentan mediante \textbf{Load}, estas pueden definirse de dos maneras como:
+\begin{align*}
+    (P, PF) \\
+\end{align*}
+\begin{center}
+    De otra forma:
+\end{center}
+\begin{align*}
+    (P, Q) \\
+\end{align*}
+En el primer caso se define la potencia activa y el factor de potencia del sistema.
+Mientras que en el segundo se define la potencia activa y la potencia reactiva del sistema.
+
+\subsection{Ejemplo en OpenDSS}
+
+Para aterrizar estos conceptos se puede mostrar un ejemplo de lo que se mencionó en la sección \ref{F_P OpenDSS}
+
+Usando 
+
+\begin{document}
+
+\section{Modelado en OpenDSS}
+A continuación se presenta un fragmento de código con la definición de un circuito elemental:
+
+\begin{lstlisting}[caption={Circuito básico en OpenDSS}, label={lst:opendss1}]
+! Limpiar la memoria del simulador
+Clear
+
+! Crear el circuito equivalente (Barra Swing)
+New Circuit.MiCircuito Basekv=115.0 pu=1.05 phases=3 r1=0 x1=0.001
+
+! Definir un código de línea
+New LineCode.Codigo1 nphases=3 R1=0.12 X1=0.34 units=km
+
+! Conectar una línea de la barra SourceBus a la barra CargaBus
+New Line.Linea1 Bus1=SourceBus Bus2=CargaBus LineCode=Codigo1 Length=2.5
+
+! Agregar una carga trifásica en delta
+New Load.CargaTrifasica Bus1=CargaBus.1.2.3 Phases=3 Conn=delta kV=13.2 kW=400 pf=0.92
+
+Set Voltagebases=[115.0, 13.2]
+Calcvoltagebases
+Solve
+\end{lstlisting}
+
+\end{document}
 
 \section{Conclusión}
 
