@@ -14,10 +14,69 @@
     left=1.25in, 
     right=1.25in
 ]{geometry} 
+\usepackage[T1]{fontenc}
 \usepackage{listings}
+\addto\captionsspanish{%
+  \renewcommand{\lstlistingname}{Script}%
+}
 \usepackage{xcolor}
 
+% Definición de colores estilo IDE
+\definecolor{dsskeyword}{rgb}{0.0, 0.0, 0.8}    % Azul para comandos principales
+\definecolor{dssproperty}{rgb}{0.6, 0.1, 0.1}   % Marrón/Rojo para propiedades
+\definecolor{dsscomment}{rgb}{0.0, 0.5, 0.0}    % Verde para comentarios
+\definecolor{dssstring}{rgb}{0.5, 0.0, 0.5}     % Púrpura para cadenas de texto
+\definecolor{bglineas}{rgb}{0.97, 0.97, 0.97}   % Gris muy claro para el fondo
 
+% Configuración del lenguaje OpenDSS
+\lstdefinelanguage{OpenDSS}{
+  alsoletter={~, .},
+  morekeywords={
+    clear, Clear, new, New, edit, Edit, select, Select, set, Set, 
+    solve, Solve, redirect, Redirect, compile, Compile, calcvoltagebases, show, Show
+  },
+  morekeywords={
+    object, Object, Circuit, circuit, Line, line, Load, load, Transformer, transformer,
+    Capacitor, capacitor, LineCode, linecode, Reactor, reactor, Generator, generator,
+    Vsource, vsource, Monitor, monitor, PVSystem, pvsystem, Storage, storage
+  },
+  morekeywords={
+    bus1, bus2, phases, kv, kvA, kw, pf, r1, x1, r0, x0, c1, c0, length, units, 
+    conn, kVA, kW, model, basekv, pu, switch, enabled, mode, daily, yearly, status
+  },
+  sensitive=false,
+  morecomment=[l]{!},
+  morecomment=[l]{//},
+  morestring=[b]",
+  morestring=[b]'
+}
+
+% Estilo optimizado para fuente de 11pt en papel Carta (Letter)
+\lstdefinestyle{OpenDSSStyle}{
+  language=OpenDSS,
+  backgroundcolor=\color{bglineas},
+  basicstyle=\ttfamily\small,            % Ajusta el código proporcionalmente a los 11pt
+  keywordstyle=\color{dsskeyword}\bfseries,
+  commentstyle=\color{dsscomment}\itshape,
+  stringstyle=\color{dssstring},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=10pt,                         % Más espacio para que no choque con el texto en letterpaper
+  breaklines=true,                        % Rompe líneas automáticamente si el código es muy largo
+  breakatwhitespace=true,                 % Rompe líneas preferentemente en los espacios
+  showstringspaces=false,
+  frame=single,                           % Cuadro completo estructurado
+  frameround=tttt,                        % Esquinas levemente redondeadas para mejor estética
+  framesep=5pt,                           % Margen interno del cuadro
+  xleftmargin=15pt,                       % Alineación correcta con el margen izquierdo de la página
+  captionpos=b,
+  % Soporte para caracteres en español dentro de los comentarios de OpenDSS
+  extendedchars=true,
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1 {ñ}{{\~n}}1 {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1 {Ñ}{{\~N}}1
+}
+
+\lstset{style=OpenDSSStyle}
 
 \DeclareSIUnit\pu{p.u.}
 
@@ -263,35 +322,51 @@ Mientras que en el segundo se define la potencia activa y la potencia reactiva d
 
 Para aterrizar estos conceptos se puede mostrar un ejemplo de lo que se mencionó en la sección \ref{F_P OpenDSS}
 
-Usando 
+Presentando el siguiente código en OpenDSS
 
-\begin{document}
-
-\section{Modelado en OpenDSS}
-A continuación se presenta un fragmento de código con la definición de un circuito elemental:
-
-\begin{lstlisting}[caption={Circuito básico en OpenDSS}, label={lst:opendss1}]
-! Limpiar la memoria del simulador
+\begin{lstlisting}[caption={Definición de elementos en OpenDSS.}, label={lst:codigo_ejemplo}]
 Clear
 
-! Crear el circuito equivalente (Barra Swing)
-New Circuit.MiCircuito Basekv=115.0 pu=1.05 phases=3 r1=0 x1=0.001
+New Circuit.Monofasico
+~ basekV=69
+~ pu=1.0
+~ phases=1
+~ bus1=Bus1
 
-! Definir un código de línea
-New LineCode.Codigo1 nphases=3 R1=0.12 X1=0.34 units=km
+New Line.Linea1
+~ phases=1
+~ bus1=Bus1
+~ bus2=Bus2
+~ rmatrix=(0.1515)
+~ xmatrix=(0.03639)
+~ cmatrix=(0)
+~ length=32.1869
+~ units=km
 
-! Conectar una línea de la barra SourceBus a la barra CargaBus
-New Line.Linea1 Bus1=SourceBus Bus2=CargaBus LineCode=Codigo1 Length=2.5
+New Load.Carga1
+~ phases=1
+~ bus1=Bus2
+~ conn=wye
+~ kV=69
+~ kW=100
+~ kvar=50
+~ model=1
 
-! Agregar una carga trifásica en delta
-New Load.CargaTrifasica Bus1=CargaBus.1.2.3 Phases=3 Conn=delta kV=13.2 kW=400 pf=0.92
+Set VoltageBases=[69]
 
-Set Voltagebases=[115.0, 13.2]
-Calcvoltagebases
+CalcVoltageBases
+
 Solve
 \end{lstlisting}
 
-\end{document}
+Lo que da la siguietne respuesta:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=2in]{Resul_Circ_Mono.png}
+\caption{Resultados de la simulación del Circuito Monofásico}
+\label{Resul_Cir_Mono}
+\end{figure}
 
 \section{Conclusión}
 
